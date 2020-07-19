@@ -29,6 +29,7 @@ public class Csv {
             while (cr.readRecord()) {
                 oil oil=new oil();
                 String[] strings=cr.getValues();
+//                strings[0]="20"+strings[0];
                 oil.setdata(strings);
 //                System.out.println(oil);
                 arrayList.add(oil);

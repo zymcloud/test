@@ -108,11 +108,11 @@ public class oilDao {
                 " `QiXiaZuanJSD`, `FixPointECD`, `DrillECD`, `DrillStringPressureDrop`, `DrillBitPressureDrop`, " +
                 "`EnvironmentalControlPressureLoss`, `TargetBackPressure`, `HydrostaticPressure`, `State_1`, `State_2`)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " +
-                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, null, null)";
+                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, null)";
         Connection conn=null;
         PreparedStatement ps=null;
         try{
-            url+="?rewriteBatchedStatements=true";
+            url+="&rewriteBatchedStatements=true";
             conn=JDBCUtils.getconnection(url,username,password);
             ps=conn.prepareStatement(sql);
             for(int j=0;j<arraylist.size();j++){
@@ -120,6 +120,7 @@ public class oilDao {
                 for(int i=0;i<arraylist.get(j).getDatas().length;i++){
                     ps.setDouble(i+2,arraylist.get(j).getDatas()[i]);
                 }
+                ps.setInt(68,arraylist.get(j).getState());
                 ps.addBatch();
                 if(j%500==0){
                     ps.executeBatch();
@@ -278,76 +279,76 @@ public class oilDao {
                 "create table `"+tableName+"`  (\n" +
                 "  `id` double(255, 0) UNSIGNED not null AUTO_INCREMENT,\n" +
                 "  `DateTime` varchar(255) CHARACTER SET gb2312 COLLATE gb2312_chinese_ci NULL DEFAULT NULL,\n" +
-                "  `Time` double(255, 0) NOT NULL,\n" +
-                "  `WellDep` double(255, 2) NULL DEFAULT NULL COMMENT '井深(m)',\n" +
-                "  `HangDownDeep` double(255, 2) NULL DEFAULT NULL COMMENT '垂深(m)',\n" +
-                "  `DepthOfTheDrillBit` double(255, 2) NULL DEFAULT NULL COMMENT '钻头深度(m)',\n" +
-                "  `DrillDownDeep` double(255, 2) NULL DEFAULT NULL COMMENT '钻头垂深(m)',\n" +
-                "  `DrillingTime` double(255, 2) NULL DEFAULT NULL COMMENT '钻时(min/m)',\n" +
-                "  `BitPressure` double(255, 2) NULL DEFAULT NULL COMMENT '钻压(KN)',\n" +
-                "  `HangingLoad` double(255, 2) NULL DEFAULT NULL COMMENT '悬重(KN)',\n" +
-                "  `RotationRate` double(255, 2) NULL DEFAULT NULL COMMENT '转速(rpm)',\n" +
-                "  `Torque` double(255, 2) NULL DEFAULT NULL COMMENT '扭矩(KN.m)',\n" +
-                "  `KellyDown` double(255, 2) NULL DEFAULT NULL COMMENT '方入(m)',\n" +
-                "  `HookPosition` double(255, 2) NULL DEFAULT NULL COMMENT '大钩位置(m)',\n" +
-                "  `HookSpeed` double(255, 2) NULL DEFAULT NULL COMMENT '大钩速度(m/s)',\n" +
-                "  `StandpipePressurelog` double(255, 2) NULL DEFAULT NULL COMMENT '立压log(MPa)',\n" +
-                "  `CasingPressure` double(255, 2) NULL DEFAULT NULL COMMENT '套压(MPa)',\n" +
-                "  `PumpStroke1` double(255, 2) NULL DEFAULT NULL COMMENT '泵冲1(spm)',\n" +
-                "  `PumpStroke2` double(255, 2) NULL DEFAULT NULL COMMENT '泵冲2(spm)',\n" +
-                "  `PumpStroke3` double(255, 2) NULL DEFAULT NULL COMMENT '泵冲3(spm)',\n" +
-                "  `TotalPoolSize` double(255, 2) NULL DEFAULT NULL COMMENT '总池体积(m3)',\n" +
-                "  `LayTime` double(255, 2) NULL DEFAULT NULL COMMENT '迟到时间(min)',\n" +
-                "  `MudSpill` double(255, 2) NULL DEFAULT NULL COMMENT '泥浆溢漏(m3)',\n" +
-                "  `InletFlowlog` double(255, 2) NULL DEFAULT NULL COMMENT '入口流量log(L/s)',\n" +
-                "  `OutletFlowlog` double(255, 2) NULL DEFAULT NULL COMMENT '出口流量log(%)',\n" +
-                "  `InletDensitylog` double(255, 2) NULL DEFAULT NULL COMMENT '入口密度log(g/cc)',\n" +
-                "  `OutletDensitylog` double(255, 2) NULL DEFAULT NULL COMMENT '出口密度log(g/cc)',\n" +
-                "  `EntranceTempreture` double(255, 2) NULL DEFAULT NULL COMMENT '入口温度(℃)',\n" +
-                "  `ExitTempreture` double(255, 2) NULL DEFAULT NULL COMMENT '出口温度(℃)',\n" +
-                "  `TotalHydrocarbon` double(255, 2) NULL DEFAULT NULL COMMENT '总烃(%)',\n" +
-                "  `H2S` double(255, 2) NULL DEFAULT NULL COMMENT 'H2S(ppm)',\n" +
-                "  `C1` double(255, 2) NULL DEFAULT NULL COMMENT 'C1(%)',\n" +
-                "  `C2` double(255, 2) NULL DEFAULT NULL COMMENT 'C2(%)',\n" +
-                "  `PWDDepth` double(255, 2) NULL DEFAULT NULL COMMENT 'PWD深度(m)',\n" +
-                "  `PWDHangDownDeep` double(255, 2) NULL DEFAULT NULL COMMENT 'PWD垂深(m)',\n" +
-                "  `PWD_zzyl` double(255, 2) NULL DEFAULT NULL COMMENT 'PWD钻柱压力(MPa)',\n" +
-                "  `PWD_hkyl` double(255, 2) NULL DEFAULT NULL COMMENT 'PWD环空压力(MPa)',\n" +
-                "  `PWD_hkwd` double(255, 2) NULL DEFAULT NULL COMMENT 'PWD环空温度(℃)',\n" +
-                "  `PWD_cl_ECD` double(255, 2) NULL DEFAULT NULL COMMENT 'PWD测量ECD(g/cc)',\n" +
-                "  `PWDWellDeviation` double(255, 2) NULL DEFAULT NULL COMMENT 'PWD井斜(°)',\n" +
-                "  `PWDLocation` double(255, 2) NULL DEFAULT NULL COMMENT 'PWD方位(°)',\n" +
-                "  `qztj` double(255, 2) NULL DEFAULT NULL COMMENT '注替体积(m3)',\n" +
-                "  `UpturnDepth` double(255, 2) NULL DEFAULT NULL COMMENT '上返深度(m)',\n" +
-                "  `OperatorSchema` double(255, 2) NULL DEFAULT NULL COMMENT '操作模式',\n" +
-                "  `StandpipePressure` double(255, 2) NULL DEFAULT NULL COMMENT '立压(MPa)',\n" +
-                "  `MeasurementOfBackPressure` double(255, 2) NULL DEFAULT NULL COMMENT '测量回压(MPa)',\n" +
-                "  `OutletFlow` double(255, 2) NULL DEFAULT NULL COMMENT '出口流量(L/s)',\n" +
-                "  `OutletDensity` double(255, 2) NULL DEFAULT NULL COMMENT '出口密度(g/cc)',\n" +
-                "  `BackPressurePumpFlow` double(255, 2) NULL DEFAULT NULL COMMENT '回压泵流量(L/s)',\n" +
-                "  `LoopBackPressure` double(255, 2) NULL DEFAULT NULL COMMENT '循环回压(MPa)',\n" +
-                "  `AdditionalBackPressure` double(255, 2) NULL DEFAULT NULL COMMENT '附加回压(MPa)',\n" +
-                "  `InletFlow` double(255, 2) NULL DEFAULT NULL COMMENT '入口流量(L/s)',\n" +
-                "  `FixDepth` double(255, 2) NULL DEFAULT NULL COMMENT '定点深度(m)',\n" +
-                "  `FixPointDownDeep` double(255, 2) NULL DEFAULT NULL COMMENT '定点垂深(m)',\n" +
-                "  `FixPointPressure` double(255, 2) NULL DEFAULT NULL COMMENT '定点压力(MPa)',\n" +
-                "  `WellMouthAdjustment` double(255, 2) NULL DEFAULT NULL COMMENT '井口调节压力(MPa)',\n" +
-                "  `FixPointPressureLoss` double(255, 2) NULL DEFAULT NULL COMMENT '定点压耗(MPa)',\n" +
-                "  `BoDongYL` double(255, 2) NULL DEFAULT NULL COMMENT '波动压力(MPa)',\n" +
-                "  `YaHaoXZ` double(255, 2) NULL DEFAULT NULL COMMENT '压耗修正(MPa/km)',\n" +
-                "  `QiXiaZuanSD` double(255, 2) NULL DEFAULT NULL COMMENT '起下钻速度(m/s)',\n" +
-                "  `QiXiaZuanJSD` double(255, 2) NULL DEFAULT NULL COMMENT '起下钻加速度(m/s2)',\n" +
-                "  `FixPointECD` double(255, 2) NULL DEFAULT NULL COMMENT '定点ECD(g/cm2)',\n" +
-                "  `DrillECD` double(255, 2) NULL DEFAULT NULL COMMENT '钻头ECD(g/cc)',\n" +
-                "  `DrillStringPressureDrop` double(255, 2) NULL DEFAULT NULL COMMENT '钻柱压降(MPa)',\n" +
-                "  `DrillBitPressureDrop` double(255, 2) NULL DEFAULT NULL COMMENT '钻头压降(MPa)',\n" +
-                "  `EnvironmentalControlPressureLoss` double(255, 2) NULL DEFAULT NULL COMMENT '环空压耗(MPa)',\n" +
-                "  `TargetBackPressure` double(255, 2) NULL DEFAULT NULL COMMENT '目标回压(MPa)',\n" +
-                "  `HydrostaticPressure` double(255, 2) NULL DEFAULT NULL COMMENT '静液压力(MPa)',\n" +
+                "  `Time` double(255, 10) NOT NULL,\n" +
+                "  `WellDep` double(255, 10) NULL DEFAULT NULL COMMENT '井深(m)',\n" +
+                "  `HangDownDeep` double(255, 10) NULL DEFAULT NULL COMMENT '垂深(m)',\n" +
+                "  `DepthOfTheDrillBit` double(255, 10) NULL DEFAULT NULL COMMENT '钻头深度(m)',\n" +
+                "  `DrillDownDeep` double(255, 10) NULL DEFAULT NULL COMMENT '钻头垂深(m)',\n" +
+                "  `DrillingTime` double(255, 10) NULL DEFAULT NULL COMMENT '钻时(min/m)',\n" +
+                "  `BitPressure` double(255, 10) NULL DEFAULT NULL COMMENT '钻压(KN)',\n" +
+                "  `HangingLoad` double(255, 10) NULL DEFAULT NULL COMMENT '悬重(KN)',\n" +
+                "  `RotationRate` double(255, 10) NULL DEFAULT NULL COMMENT '转速(rpm)',\n" +
+                "  `Torque` double(255, 10) NULL DEFAULT NULL COMMENT '扭矩(KN.m)',\n" +
+                "  `KellyDown` double(255, 10) NULL DEFAULT NULL COMMENT '方入(m)',\n" +
+                "  `HookPosition` double(255, 10) NULL DEFAULT NULL COMMENT '大钩位置(m)',\n" +
+                "  `HookSpeed` double(255, 10) NULL DEFAULT NULL COMMENT '大钩速度(m/s)',\n" +
+                "  `StandpipePressurelog` double(255, 10) NULL DEFAULT NULL COMMENT '立压log(MPa)',\n" +
+                "  `CasingPressure` double(255, 10) NULL DEFAULT NULL COMMENT '套压(MPa)',\n" +
+                "  `PumpStroke1` double(255, 10) NULL DEFAULT NULL COMMENT '泵冲1(spm)',\n" +
+                "  `PumpStroke2` double(255, 10) NULL DEFAULT NULL COMMENT '泵冲2(spm)',\n" +
+                "  `PumpStroke3` double(255, 10) NULL DEFAULT NULL COMMENT '泵冲3(spm)',\n" +
+                "  `TotalPoolSize` double(255, 10) NULL DEFAULT NULL COMMENT '总池体积(m3)',\n" +
+                "  `LayTime` double(255, 10) NULL DEFAULT NULL COMMENT '迟到时间(min)',\n" +
+                "  `MudSpill` double(255, 10) NULL DEFAULT NULL COMMENT '泥浆溢漏(m3)',\n" +
+                "  `InletFlowlog` double(255, 10) NULL DEFAULT NULL COMMENT '入口流量log(L/s)',\n" +
+                "  `OutletFlowlog` double(255, 10) NULL DEFAULT NULL COMMENT '出口流量log(%)',\n" +
+                "  `InletDensitylog` double(255, 10) NULL DEFAULT NULL COMMENT '入口密度log(g/cc)',\n" +
+                "  `OutletDensitylog` double(255, 10) NULL DEFAULT NULL COMMENT '出口密度log(g/cc)',\n" +
+                "  `EntranceTempreture` double(255, 10) NULL DEFAULT NULL COMMENT '入口温度(℃)',\n" +
+                "  `ExitTempreture` double(255, 10) NULL DEFAULT NULL COMMENT '出口温度(℃)',\n" +
+                "  `TotalHydrocarbon` double(255, 10) NULL DEFAULT NULL COMMENT '总烃(%)',\n" +
+                "  `H2S` double(255, 10) NULL DEFAULT NULL COMMENT 'H2S(ppm)',\n" +
+                "  `C1` double(255, 10) NULL DEFAULT NULL COMMENT 'C1(%)',\n" +
+                "  `C2` double(255, 10) NULL DEFAULT NULL COMMENT 'C2(%)',\n" +
+                "  `PWDDepth` double(255, 10) NULL DEFAULT NULL COMMENT 'PWD深度(m)',\n" +
+                "  `PWDHangDownDeep` double(255, 10) NULL DEFAULT NULL COMMENT 'PWD垂深(m)',\n" +
+                "  `PWD_zzyl` double(255, 10) NULL DEFAULT NULL COMMENT 'PWD钻柱压力(MPa)',\n" +
+                "  `PWD_hkyl` double(255, 10) NULL DEFAULT NULL COMMENT 'PWD环空压力(MPa)',\n" +
+                "  `PWD_hkwd` double(255, 10) NULL DEFAULT NULL COMMENT 'PWD环空温度(℃)',\n" +
+                "  `PWD_cl_ECD` double(255, 10) NULL DEFAULT NULL COMMENT 'PWD测量ECD(g/cc)',\n" +
+                "  `PWDWellDeviation` double(255, 10) NULL DEFAULT NULL COMMENT 'PWD井斜(°)',\n" +
+                "  `PWDLocation` double(255, 10) NULL DEFAULT NULL COMMENT 'PWD方位(°)',\n" +
+                "  `qztj` double(255, 10) NULL DEFAULT NULL COMMENT '注替体积(m3)',\n" +
+                "  `UpturnDepth` double(255, 10) NULL DEFAULT NULL COMMENT '上返深度(m)',\n" +
+                "  `OperatorSchema` double(255, 10) NULL DEFAULT NULL COMMENT '操作模式',\n" +
+                "  `StandpipePressure` double(255, 10) NULL DEFAULT NULL COMMENT '立压(MPa)',\n" +
+                "  `MeasurementOfBackPressure` double(255, 10) NULL DEFAULT NULL COMMENT '测量回压(MPa)',\n" +
+                "  `OutletFlow` double(255, 10) NULL DEFAULT NULL COMMENT '出口流量(L/s)',\n" +
+                "  `OutletDensity` double(255, 10) NULL DEFAULT NULL COMMENT '出口密度(g/cc)',\n" +
+                "  `BackPressurePumpFlow` double(255, 10) NULL DEFAULT NULL COMMENT '回压泵流量(L/s)',\n" +
+                "  `LoopBackPressure` double(255, 10) NULL DEFAULT NULL COMMENT '循环回压(MPa)',\n" +
+                "  `AdditionalBackPressure` double(255, 10) NULL DEFAULT NULL COMMENT '附加回压(MPa)',\n" +
+                "  `InletFlow` double(255, 10) NULL DEFAULT NULL COMMENT '入口流量(L/s)',\n" +
+                "  `FixDepth` double(255, 10) NULL DEFAULT NULL COMMENT '定点深度(m)',\n" +
+                "  `FixPointDownDeep` double(255, 10) NULL DEFAULT NULL COMMENT '定点垂深(m)',\n" +
+                "  `FixPointPressure` double(255, 30) NULL DEFAULT NULL COMMENT '定点压力(MPa)',\n" +
+                "  `WellMouthAdjustment` double(255, 10) NULL DEFAULT NULL COMMENT '井口调节压力(MPa)',\n" +
+                "  `FixPointPressureLoss` double(255, 10) NULL DEFAULT NULL COMMENT '定点压耗(MPa)',\n" +
+                "  `BoDongYL` double(255, 10) NULL DEFAULT NULL COMMENT '波动压力(MPa)',\n" +
+                "  `YaHaoXZ` double(255, 10) NULL DEFAULT NULL COMMENT '压耗修正(MPa/km)',\n" +
+                "  `QiXiaZuanSD` double(255, 10) NULL DEFAULT NULL COMMENT '起下钻速度(m/s)',\n" +
+                "  `QiXiaZuanJSD` double(255, 10) NULL DEFAULT NULL COMMENT '起下钻加速度(m/s2)',\n" +
+                "  `FixPointECD` double(255, 10) NULL DEFAULT NULL COMMENT '定点ECD(g/cm2)',\n" +
+                "  `DrillECD` double(255, 10) NULL DEFAULT NULL COMMENT '钻头ECD(g/cc)',\n" +
+                "  `DrillStringPressureDrop` double(255, 10) NULL DEFAULT NULL COMMENT '钻柱压降(MPa)',\n" +
+                "  `DrillBitPressureDrop` double(255, 10) NULL DEFAULT NULL COMMENT '钻头压降(MPa)',\n" +
+                "  `EnvironmentalControlPressureLoss` double(255, 10) NULL DEFAULT NULL COMMENT '环空压耗(MPa)',\n" +
+                "  `TargetBackPressure` double(255, 10) NULL DEFAULT NULL COMMENT '目标回压(MPa)',\n" +
+                "  `HydrostaticPressure` double(255, 10) NULL DEFAULT NULL COMMENT '静液压力(MPa)',\n" +
                 "  `State_1` double(255, 0) NULL DEFAULT NULL COMMENT '工况1',\n" +
                 "  `State_2` double(255, 0) NULL DEFAULT NULL COMMENT '工况2',\n" +
                 "  PRIMARY KEY USING BTREE (`id`)\n" +
-                ") ENGINE = InnoDB AUTO_INCREMENT = 1042 CHARACTER SET = gb2312 COLLATE = gb2312_chinese_ci ROW_FORMAT = Compact;\n";
+                ") ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = gb2312 COLLATE = gb2312_chinese_ci ROW_FORMAT = Compact;\n";
 
         Connection conn=null;
 //        PreparedStatement ps=null;

@@ -62,7 +62,26 @@ public class CopyOfReadFile {
 //        }
         return filearray;
     }
-
+    public static Boolean readrecord(String filepath) throws FileNotFoundException {
+        File file = new File(filepath);
+        if (!file.isDirectory()) {
+            String filename = file.getAbsolutePath();
+            int j = 0;
+            for (j = filename.length() - 1; j >= 0; j--) {
+                if (filename.charAt(j) == '.') {
+                    break;
+                }
+            }
+            String s = filename.substring(j + 1);
+            if (s.equals("xls")||s.equals("xlsx")) {
+                return true;
+            }
+            return false;
+        } else if (file.isDirectory()) {
+            return false;
+        }
+        return false;
+    }
     public static void main(String args[]){
         try {
             ArrayList<String> filearray=null;

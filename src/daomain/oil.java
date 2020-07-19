@@ -5,9 +5,20 @@ import java.util.Arrays;
 public class oil {
    private String datetime;
    private double[] datas;
-   public oil(){
+   private int state;
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public oil(){
        datetime="00:00:00";
        datas=new double[66];
+       state=0;
    }
 
     public String getDatetime() {
