@@ -719,6 +719,7 @@ public class MyFrame extends JFrame{
         text8.setText("Sheet:"+sheet);
         try {
             recordmessage=Readfile.readSpecifyColumns(record,sheet);
+            JOptionPane.showMessageDialog(this, "修改成功", "提示",JOptionPane.WARNING_MESSAGE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -748,10 +749,6 @@ public class MyFrame extends JFrame{
         String url2="jdbc:mysql://"+url+"/"+schema+"?serverTimezone=GMT%2B8";
         Boolean isschemaexist=oildao.isSchemaExist(url2,username,password,schema);
         if(isschemaexist){
-//           Boolean issame=check(schema);
-//           if(!issame){
-//             changeurl(schema);
-//           }
             this.dsname=schema;
             text5.setText("Schema:"+this.dsname);
         }else{
