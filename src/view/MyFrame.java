@@ -726,7 +726,7 @@ public class MyFrame extends JFrame{
     }
     void changeurl(String url,String username,String password){
         oilDao oildao=new oilDao();
-        String url2="jdbc:mysql://"+url+"/mysql"+"?serverTimezone=GMT%2B8";
+        String url2="jdbc:mysql://"+url+"/information_schema"+"?serverTimezone=GMT%2B8"+"&useSSL=false";
         Boolean isconnect=oildao.checkconnection(url2,username,password);
         if(isconnect) {
             this.url = url;
@@ -746,13 +746,13 @@ public class MyFrame extends JFrame{
             JOptionPane.showMessageDialog(this, "请先连接数据库", "警告",JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String url2="jdbc:mysql://"+url+"/"+schema+"?serverTimezone=GMT%2B8";
+        String url2="jdbc:mysql://"+url+"/"+schema+"?serverTimezone=GMT%2B8"+"&useSSL=false";
         Boolean isschemaexist=oildao.isSchemaExist(url2,username,password,schema);
         if(isschemaexist){
             this.dsname=schema;
             text5.setText("Schema:"+this.dsname);
         }else{
-            url2="jdbc:mysql://"+url+"/mysql"+"?serverTimezone=GMT%2B8";
+            url2="jdbc:mysql://"+url+"/mysql"+"?serverTimezone=GMT%2B8"+"&useSSL=false";
             int choice=JOptionPane.showConfirmDialog(null, "数据库中没有该数据库的名字，是否要创建该数据库", "提示",JOptionPane.YES_NO_OPTION);
                 if(choice==0){
                     Boolean createschema=oildao.createSchema(url2,username,password,schema);
@@ -760,7 +760,7 @@ public class MyFrame extends JFrame{
                         this.dsname=schema;
                         text5.setText("Schema:"+this.dsname);
                         JOptionPane.showMessageDialog(this, "创建数据库成功", "提示",JOptionPane.WARNING_MESSAGE);
-                        url2="jdbc:mysql://"+url+"/"+schema+"?serverTimezone=GMT%2B8";
+                        url2="jdbc:mysql://"+url+"/"+schema+"?serverTimezone=GMT%2B8"+"&useSSL=false";
 //                        changeurl(schema);
                     } else{
                         JOptionPane.showMessageDialog(this, "创建数据库成功", "提示",JOptionPane.WARNING_MESSAGE);
@@ -862,7 +862,7 @@ public class MyFrame extends JFrame{
         String username=this.username;
         String password=this.password;
         String table=this.table;
-        String url2="jdbc:mysql://"+url+"/"+dsname+"?serverTimezone=GMT%2B8";
+        String url2="jdbc:mysql://"+url+"/"+dsname+"?serverTimezone=GMT%2B8"+"&useSSL=false";
         ArrayList<String> scvs= (ArrayList<String>)this.scvfiles.clone();
         oilDao oildao=new oilDao();
         /**多线程操作

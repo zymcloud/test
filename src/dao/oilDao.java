@@ -7,12 +7,14 @@ import daomain.oil;
 
 import java.sql.*;
 import java.util.ArrayList;
-
+//server.ownbox.cn:3306
+//oil
+//NXdaPdShshF6rRja
 public class oilDao {
     public Boolean checkconnection(String url,String username,String password) {
         Connection conn=null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
 //            url+="serverTimezone=GMT%2B8";
             conn= DriverManager.getConnection(url,username,password);
             if(conn!=null){
@@ -113,6 +115,7 @@ public class oilDao {
         PreparedStatement ps=null;
         try{
             url+="&rewriteBatchedStatements=true";
+            url+="&testConnectionOnCheckout=false"+"&testConnectionOnCheckin=true"+"&idleConnectionTestPeriod=90"+"&autoReconnect=true";
             conn=JDBCUtils.getconnection(url,username,password);
             ps=conn.prepareStatement(sql);
             for(int j=0;j<arraylist.size();j++){
